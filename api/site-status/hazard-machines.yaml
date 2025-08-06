@@ -1,7 +1,7 @@
 openapi: 3.0.1
 info:
   title: Hazardous Machine Protection API
-  version: 1.0.0
+  version: 1.0.1
   description: 유해·위험 기계·기구의 방호조치 상태 관리 API
 
 paths:
@@ -87,24 +87,46 @@ components:
   schemas:
     HazardMachine:
       type: object
-      properties:
-        type:
-          type: string
-          example: 예초기
-        count:
-          type: integer
-          example: 3
-        protectionDetails:
-          type: string
-          example: 날접촉 예방장치(덮개 등)
-        protectionImplemented:
-          type: boolean
-          example: true
-        photoUrl:
-          type: string
-          format: uri
-          example: https://example.com/photo.jpg
       required:
         - type
         - count
         - protectionDetails
+      properties:
+        type:
+          type: string
+          description: |
+            기계·기구 종류
+            - 예시: 예초기, 원심기, 지게차, 공기압축기, 포장기, 금속절단기 등
+            - 산업안전보건법상 유해·위험 기계 기구 목록에 해당하는 장비
+          example: 예초기
+
+        count:
+          type: integer
+          description: |
+            해당 기계·기구의 보유 대수
+          example: 3
+
+        protectionDetails:
+          type: string
+          description: |
+            방호조치 상세 설명
+            - 설치된 방호장치나 예방장치의 명칭 또는 기능
+            - 예: 날접촉 예방장치, 낙하방지 덮개 등
+          example: 날접촉 예방장치(두께 2mm, 밀림 방지 구조)
+
+        protectionImplemented:
+          type: boolean
+          description: |
+            방호조치 실시 여부
+            - true: 방호조치가 되어 있음
+            - false: 방호조치가 되어 있지 않음
+          example: true
+
+        photoUrl:
+          type: string
+          format: uri
+          description: |
+            방호조치 증빙 사진의 URL
+            - 기계에 설치된 방호장치의 실제 사진
+            - 등록 시 이미지를 업로드하여 노출
+          example: https://example.com/photo.jpg
