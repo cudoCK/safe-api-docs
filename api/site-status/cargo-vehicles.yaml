@@ -70,7 +70,7 @@ components:
       properties:
         plateNumber:
           type: string
-          description: 차량 번호 (예: 12나1111)
+          description: 차량 번호 (예] 12나1111)
           example: "12나1111"
         model:
           type: string
@@ -78,11 +78,11 @@ components:
           example: "포터"
         maxLoad:
           type: string
-          description: 최대 적재량 (예: 1톤, 2.5톤 등)
+          description: 최대 적재량 (예] 1톤, 2.5톤 등)
           example: "1톤"
         vehicleType:
           type: string
-          description: 차량의 종류 (예: 화물, 특수 등)
+          description: 차량의 종류 (예] 화물, 특수 등)
           example: "화물"
       required:
         - plateNumber
