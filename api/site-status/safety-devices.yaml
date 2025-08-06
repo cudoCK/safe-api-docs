@@ -90,21 +90,26 @@ components:
   schemas:
     SafetyDevicesRequest:
       type: object
+      description: 기계 및 화학물질 등록/수정 요청
       properties:
         machines:
           type: array
+          description: 등록할 기계 목록
           items:
             $ref: '#/components/schemas/Machine'
         chemicals:
           type: array
+          description: 등록할 화학물질 목록
           items:
             $ref: '#/components/schemas/Chemical'
 
     SafetyDevicesResponse:
       type: object
+      description: 기계 및 화학물질 조회 응답
       properties:
         machines:
           type: array
+          description: 등록된 기계 목록
           items:
             allOf:
               - $ref: '#/components/schemas/Machine'
@@ -112,8 +117,10 @@ components:
                 properties:
                   id:
                     type: integer
+                    description: 고유 ID
         chemicals:
           type: array
+          description: 등록된 화학물질 목록
           items:
             allOf:
               - $ref: '#/components/schemas/Chemical'
@@ -121,19 +128,23 @@ components:
                 properties:
                   id:
                     type: integer
+                    description: 고유 ID
 
     Machine:
       type: object
+      description: 기계 정보
       properties:
         type:
           type: string
+          description: 기계/기구 종류
           example: 프레스
         count:
           type: integer
+          description: 보유 대수
           example: 2
         inspectionDone:
           type: boolean
-          description: true=실시, false=미실시
+          description: 안전검사 여부 (true=실시, false=미실시)
           example: true
       required:
         - type
@@ -142,28 +153,36 @@ components:
 
     Chemical:
       type: object
+      description: 화학물질 정보
       properties:
         name:
           type: string
+          description: 화학물질명
           example: 휘발유
         maxStorage:
           type: number
+          description: 최대 저장량
           example: 10
         recentUsage:
           type: number
+          description: 최근 취급량
           example: 2
         unit:
           type: string
+          description: 단위
           example: L
         process:
           type: string
+          description: 사용 공정
           example: 예초작업 시
         msdsPhotoUrl:
           type: string
           format: uri
+          description: MSDS 사진 URL
           example: https://example.com/photo.jpg
         msdsVersion:
           type: string
+          description: MSDS 문서 버전
           example: v1.0.0
       required:
         - name
