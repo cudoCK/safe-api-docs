@@ -2,7 +2,7 @@ openapi: 3.0.1
 info:
   title: Cargo Vehicle Ownership API
   version: 2.0.0
-  description: 사업장 내 화물자동차 보유 현황 일괄 등록/수정 및 전체 삭제 API
+  description: 사업장 내 화물자동차 보유 현황
 
 paths:
   /api/site-status/{siteId}/cargo-vehicles:

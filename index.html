@@ -1,19 +1,51 @@
-<!-- HTML for static distribution bundle build -->
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title>Swagger UI</title>
-    <link rel="stylesheet" type="text/css" href="./swagger-ui.css" />
-    <link rel="stylesheet" type="text/css" href="index.css" />
-    <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
-    <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
+    <title>Multi Swagger YAML</title>
+    <link rel="stylesheet" href="swagger-ui.css" />
+    <script src="swagger-ui-bundle.js"></script>
+    <script src="swagger-ui-standalone-preset.js"></script>
+    <style>
+      html { box-sizing: border-box; overflow: -moz-scrollbars-vertical; overflow-y: scroll; }
+      *, *:before, *:after { box-sizing: inherit; }
+      body { margin:0; background: #fafafa; }
+      #selector { margin: 10px; }
+    </style>
   </head>
-
   <body>
+    <div id="selector">
+      <label for="spec-select">🔽 문서 선택:</label>
+      <select id="spec-select">
+        <option value="api/site-status.yaml">사업장 현황</option>
+        <option value="api/site-status/safety-devices.yaml">안전검사대상기계-보유현황</option>
+        <option value="api/site-status/hazard-machines.yaml">유해·위험 기계·기구 현황 및 방호조치 상태(6종)</option>
+        <option value="api/site-status/cargo-vehicles.yaml">화물자동차 보유 현황</option>
+      </select>
+    </div>
+
     <div id="swagger-ui"></div>
-    <script src="./swagger-ui-bundle.js" charset="UTF-8"> </script>
-    <script src="./swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
-    <script src="./swagger-initializer.js" charset="UTF-8"> </script>
+
+    <script>
+      function loadSwagger(url) {
+        window.ui = SwaggerUIBundle({
+          url: url,
+          dom_id: '#swagger-ui',
+          deepLinking: true,
+          presets: [SwaggerUIBundle.presets.apis, SwaggerUIStandalonePreset],
+          plugins: [SwaggerUIBundle.plugins.DownloadUrl],
+          layout: "StandaloneLayout"
+        });
+      }
+
+      // 초기 로드
+      const defaultSpec = document.getElementById('spec-select').value;
+      loadSwagger(defaultSpec);
+
+      // 드롭다운 변경 시 다시 로드
+      document.getElementById('spec-select').addEventListener('change', (e) => {
+        loadSwagger(e.target.value);
+      });
+    </script>
   </body>
 </html>
