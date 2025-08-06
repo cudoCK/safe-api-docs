@@ -1,0 +1,150 @@
+openapi: 3.0.1
+info:
+  title: Site Overview API
+  version: 1.0.1
+  description: 사업장 개요 전체 데이터 조회 및 개별 항목별 수정 연동용 API
+
+paths:
+  /api/site-status/{siteId}/overview:
+    get:
+      summary: 사업장 개요 전체 조회
+      description: 전체 사업장 개요 정보를 통합하여 조회합니다. 각 항목은 별도 화면에서 수정됩니다.
+      parameters:
+        - name: siteId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteOverview'
+
+components:
+  schemas:
+    SiteOverview:
+      type: object
+      description: 사업장 개요 전체 정보
+      properties:
+        siteInfo:
+          $ref: '#/components/schemas/SiteInfo'
+        accidentHistory:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccidentRecord'
+        inspectionMachines:
+          type: array
+          items:
+            $ref: '#/components/schemas/InspectionMachine'
+        hazardMachines:
+          type: array
+          items:
+            $ref: '#/components/schemas/HazardMachine'
+        cargoVehicles:
+          type: array
+          items:
+            $ref: '#/components/schemas/CargoVehicle'
+        safetyOrganization:
+          $ref: '#/components/schemas/SafetyOrganization'
+        obligationChecklist:
+          type: array
+          items:
+            $ref: '#/components/schemas/ObligationItem'
+
+    SiteInfo:
+      type: object
+      description: 사업장 기본 정보
+      properties:
+        companyName: { type: string, example: "OO건설" }
+        period: { type: string, example: "2024.01 ~ 2025.12" }
+        supervisingEntities: { type: array, items: { type: string }, example: ["본사", "감리"] }
+        safetyManager: { type: string, example: "홍길동" }
+        managerPosition: { type: string, example: "부장" }
+        managerPhone: { type: string, example: "010-1234-5678" }
+        siteWorkers: { type: array, items: { type: string }, example: ["홍길동", "김철수"] }
+
+    AccidentRecord:
+      type: object
+      description: 산업재해 발생 이력
+      properties:
+        date: { type: string, format: date, example: "2023-06-01" }
+        victim: { type: string, example: "김작업" }
+        employmentType: { type: string, example: "하도급" }
+        injuryType: { type: string, example: "골절" }
+        detail: { type: string, example: "지붕 작업 중 추락" }
+        hasReport: { type: boolean, example: true }
+
+    InspectionMachine:
+      type: object
+      description: 안전검사 대상 기계 현황
+      properties:
+        name: { type: string, example: "압축기" }
+        capacity: { type: string, example: "5마력" }
+        pressure: { type: string, example: "10kg/cm2" }
+        unit: { type: string, example: "대" }
+        process: { type: string, example: "조립" }
+        msdsAttachment: { type: string, example: "압축기_MSDS.pdf" }
+        msdsVersion: { type: string, example: "v1.0" }
+
+    HazardMachine:
+      type: object
+      description: 유해위험기계기구 및 방호조치 상태
+      properties:
+        type: { type: string, example: "예초기" }
+        count: { type: integer, example: 2 }
+        protectionDetails: { type: string, example: "날접촉 예방장치" }
+        protectionImplemented: { type: boolean, example: true }
+        photoUrl: { type: string, format: uri, example: "https://example.com/photo.jpg" }
+
+    CargoVehicle:
+      type: object
+      description: 화물자동차 보유 현황
+      properties:
+        plateNumber: { type: string, example: "12나1111" }
+        model: { type: string, example: "포터" }
+        maxLoad: { type: string, example: "1톤" }
+        vehicleType: { type: string, example: "화물" }
+
+    SafetyOrganization:
+      type: object
+      description: 안전보건 조직
+      properties:
+        general:
+          type: object
+          properties:
+            name: { type: string, example: "홍길동" }
+            phone: { type: string, example: "010-1111-1111" }
+        manager:
+          type: object
+          properties:
+            name: { type: string, example: "김감독" }
+            phone: { type: string, example: "010-2222-2222" }
+        supervisor:
+          type: object
+          properties:
+            name: { type: string, example: "박감리" }
+            phone: { type: string, example: "010-3333-3333" }
+        healthManager:
+          type: object
+          properties:
+            name: { type: string, example: "이보건" }
+            phone: { type: string, example: "010-4444-4444" }
+        guardian:
+          type: object
+          properties:
+            name: { type: string, example: "최보호" }
+            phone: { type: string, example: "010-5555-5555" }
+
+    ObligationItem:
+      type: object
+      description: 중대재해 의무이행 점검표
+      properties:
+        itemNo: { type: integer, example: 3 }
+        title: { type: string, example: "유해위험요인 확인 및 개선방안 수립" }
+        checked: { type: string, enum: ["이행", "미이행", "해당없음"], example: "이행" }
+        details: { type: string, example: "계획서 작성 완료 및 교육 이수" }
+        isDPPlan: { type: boolean, example: true }
+        isWritten: { type: boolean, example: true }
