@@ -153,6 +153,46 @@ paths:
               schema:
                 $ref: '#/components/schemas/CommonResponse'
 
+    put:
+      summary: 안전검사대상기계 및 화학물질 정보 수정
+      tags: [SiteStatus]
+      parameters:
+        - in: path
+          name: siteId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SafetyDevicesRequest'
+      responses:
+        '200':
+          description: 수정 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonResponse'
+
+    delete:
+      summary: 안전검사대상기계 및 화학물질 정보 삭제
+      tags: [SiteStatus]
+      parameters:
+        - in: path
+          name: siteId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 삭제 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonResponse'
+
 components:
   schemas:
     SiteStatusRequest:
