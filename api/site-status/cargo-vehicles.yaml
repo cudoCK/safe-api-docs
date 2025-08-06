@@ -1,108 +1,91 @@
 openapi: 3.0.1
 info:
-  title: Site Summary API
-  version: 1.0.0
-  description: 사업장 개요 - 전반적인 안전/물류/조직/사고/위험 설비 보유 상태 종합 관리
+  title: Cargo Vehicle Ownership API
+  version: 2.0.0
+  description: 사업장 내 화물자동차 보유 현황 정보를 조회하거나 일괄 등록/수정/삭제하는 API입니다.
 
 paths:
-  /api/site-status/{siteId}/summary:
+  /api/site-status/{siteId}/cargo-vehicles:
     get:
-      summary: 사업장 개요 정보 조회
+      summary: 화물자동차 목록 조회
+      description: 특정 사업장의 화물자동차 보유 목록을 조회합니다.
       parameters:
         - name: siteId
           in: path
           required: true
           schema:
             type: string
+          description: 사업장 고유 ID
       responses:
         '200':
-          description: 조회 성공
+          description: 화물자동차 목록 조회 성공
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SiteSummary'
+                type: array
+                items:
+                  $ref: '#/components/schemas/CargoVehicle'
 
     post:
-      summary: 사업장 개요 정보 등록
+      summary: 화물자동차 목록 일괄 등록 또는 수정
+      description: 특정 사업장의 화물자동차 보유 정보를 일괄 등록하거나 수정합니다.
       parameters:
         - name: siteId
           in: path
           required: true
           schema:
             type: string
+          description: 사업장 고유 ID
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/SiteSummary'
+              type: array
+              items:
+                $ref: '#/components/schemas/CargoVehicle'
       responses:
         '200':
-          description: 등록 성공
-
-    put:
-      summary: 사업장 개요 정보 수정
-      parameters:
-        - name: siteId
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SiteSummary'
-      responses:
-        '200':
-          description: 수정 성공
+          description: 저장 또는 수정 성공
 
     delete:
-      summary: 사업장 개요 정보 삭제
+      summary: 화물자동차 전체 삭제
+      description: 특정 사업장의 화물자동차 정보를 모두 삭제합니다.
       parameters:
         - name: siteId
           in: path
           required: true
           schema:
             type: string
+          description: 사업장 고유 ID
       responses:
         '200':
-          description: 삭제 성공
+          description: 전체 삭제 성공
 
 components:
   schemas:
-    SiteSummary:
+    CargoVehicle:
       type: object
+      description: 사업장에서 보유 중인 화물자동차 1대의 정보
       properties:
-        siteStatus:
+        plateNumber:
           type: string
-          description: 사업장 상태 요약 ( 정상 운영, 일부 공정 중단 등)
-          example: "정상 운영 중"
-        accidentHistory:
+          description: 차량 번호 (예: 12나1111)
+          example: "12나1111"
+        model:
           type: string
-          description: 최근 산업재해 발생 여부 및 요약
-          example: "2024년 2월 손가락 끼임 사고 1건 발생"
-        safetyEquipmentOwned:
+          description: 차량명 또는 모델명
+          example: "포터"
+        maxLoad:
           type: string
-          description: 보유한 안전장치 요약
-          example: "감지기, 방호덮개, 정지버튼 보유"
-        hazardousEquipmentOwned:
+          description: 최대 적재량 (예: 1톤, 2.5톤 등)
+          example: "1톤"
+        vehicleType:
           type: string
-          description: 유해/위험 설비 보유 여부 및 종류
-          example: "프레스, 절단기"
-        cargoVehicleOwned:
-          type: boolean
-          description: 화물자동차 보유 여부
-          example: true
-        safetyOrganizationAssigned:
-          type: string
-          description: 안전보건 조직 구성 여부
-          example: "안전관리자, 보건관리자 배치 완료"
+          description: 차량의 종류 (예: 화물, 특수 등)
+          example: "화물"
       required:
-        - siteStatus
-        - accidentHistory
-        - safetyEquipmentOwned
-        - hazardousEquipmentOwned
-        - cargoVehicleOwned
-        - safetyOrganizationAssigned
+        - plateNumber
+        - model
+        - maxLoad
+        - vehicleType
