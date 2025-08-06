@@ -1,0 +1,173 @@
+openapi: 3.0.1
+info:
+  title: Site Safety Devices API
+  version: 1.0.3
+  description: 사업장 내 안전검사대상기계 및 화학물질 보유 현황 관리
+
+paths:
+  /api/site-status/{siteId}/safety-devices:
+    get:
+      summary: 안전검사대상기계 및 유해위험기기, 화학물질 목록 조회
+      parameters:
+        - name: siteId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SafetyDevicesResponse'
+
+    post:
+      summary: 안전검사대상기계 및 화학물질 등록
+      parameters:
+        - name: siteId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SafetyDevicesRequest'
+      responses:
+        '200':
+          description: 등록 성공
+
+    put:
+      summary: 안전검사대상기계 및 화학물질 정보 수정
+      parameters:
+        - name: siteId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SafetyDevicesRequest'
+      responses:
+        '200':
+          description: 수정 성공
+
+    delete:
+      summary: 안전검사대상기계 및 화학물질 정보 삭제
+      parameters:
+        - name: siteId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: machineIds
+          in: query
+          required: false
+          description: 삭제할 기계 ID 목록
+          schema:
+            type: array
+            items:
+              type: integer
+        - name: chemicalIds
+          in: query
+          required: false
+          description: 삭제할 화학물질 ID 목록
+          schema:
+            type: array
+            items:
+              type: integer
+      responses:
+        '200':
+          description: 삭제 성공
+
+components:
+  schemas:
+    SafetyDevicesRequest:
+      type: object
+      properties:
+        machines:
+          type: array
+          items:
+            $ref: '#/components/schemas/Machine'
+        chemicals:
+          type: array
+          items:
+            $ref: '#/components/schemas/Chemical'
+
+    SafetyDevicesResponse:
+      type: object
+      properties:
+        machines:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Machine'
+              - type: object
+                properties:
+                  id:
+                    type: integer
+        chemicals:
+          type: array
+          items:
+            allOf:
+              - $ref: '#/components/schemas/Chemical'
+              - type: object
+                properties:
+                  id:
+                    type: integer
+
+    Machine:
+      type: object
+      properties:
+        type:
+          type: string
+          example: 프레스
+        count:
+          type: integer
+          example: 2
+        inspectionDone:
+          type: boolean
+          description: true=실시, false=미실시
+          example: true
+      required:
+        - type
+        - count
+        - inspectionDone
+
+    Chemical:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 휘발유
+        maxStorage:
+          type: number
+          example: 10
+        recentUsage:
+          type: number
+          example: 2
+        unit:
+          type: string
+          example: L
+        process:
+          type: string
+          example: 예초작업 시
+        msdsPhotoUrl:
+          type: string
+          format: uri
+          example: https://example.com/photo.jpg
+        msdsVersion:
+          type: string
+          example: v1.0.0
+      required:
+        - name
+        - maxStorage
+        - recentUsage
+        - unit
+        - process
